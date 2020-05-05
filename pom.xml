@@ -48,6 +48,21 @@
 	<issueManagement>
 		<url>${issues.url}</url>
 	</issueManagement>
+	<repositories>
+		<repository>
+			<id>archetype</id><!-- id expected by maven-archetype-plugin to avoid 
+				fetching from everywhere -->
+			<url>https://jitpack.io</url>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 	
 	<dependencies>
 		<dependency>
