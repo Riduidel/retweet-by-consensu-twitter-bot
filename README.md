@@ -44,7 +44,7 @@ When more than a configurable given percentage of the *moderators* approve the l
 
 #### OK, but technically speaking ?
 
-We have a very comprehensive documentation about technical and architectural details.
+We have a very [comprehensive documentation about technical and architectural details](https://riduidel.github.io/retweet-by-consensus-twitter-bot/).
 
 ## Author
 
