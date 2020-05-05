@@ -24,7 +24,7 @@
  		<issues.url>https://github.com/Riduidel/retweet-by-consensu-twitter-bot/issues</issues.url>
 		<!-- end::issues-url[] -->
 		<!-- Defining a version that doesn't suck -->
-		<agile-architecture-version>master-SNAPSHOT</agile-architecture-version>
+		<agile-architecture-version>0.0.3</agile-architecture-version>
 
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctor-maven-plugin -->
 		<version.asciidoctor.maven.plugin>2.0.0-RC.1</version.asciidoctor.maven.plugin>
