@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>parent</artifactId>
 		<groupId>org.ndx.retweet.by.consensus</groupId>
-	<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>architecture</artifactId>
 	<properties>
@@ -47,13 +47,10 @@
 			<artifactId>base</artifactId>
 			<version>${agile-architecture-version}</version>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
-			<artifactId>github-issues-adr</artifactId>
-			<version>${agile-architecture-version}</version>
-		</dependency>
- -->
- 	</dependencies>
+		<!-- <dependency> <groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId> 
+			<artifactId>github-issues-adr</artifactId> <version>${agile-architecture-version}</version> 
+			</dependency> -->
+	</dependencies>
 
 	<build>
 		<pluginManagement>
