@@ -33,9 +33,24 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.pivovarit/throwing-function -->
+		<dependency>
+			<groupId>com.pivovarit</groupId>
+			<artifactId>throwing-function</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-core</artifactId>
+			<version>4.0.7</version>
+		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-resteasy</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-resteasy-qute</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
@@ -49,7 +64,59 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>${version.java}</version>
+								</requireJavaVersion>
+								<!-- All these variables should be set in your settings.xml in a 
+									profile (see README for more infos) -->
+								<requireProperty>
+									<property>TWITTER_API_KEY</property>
+								</requireProperty>
+								<requireProperty>
+									<property>TWITTER_API_SECRET</property>
+								</requireProperty>
+								<requireProperty>
+									<property>TWITTER_ACCESS_TOKEN_KEY</property>
+								</requireProperty>
+								<requireProperty>
+									<property>TWITTER_ACCESS_TOKEN_SECRET</property>
+								</requireProperty>
+								<requireProperty>
+									<property>CURATOR_ACCOUNT</property>
+								</requireProperty>
+								<requireProperty>
+									<property>CURATOR_ACCESS_KEY</property>
+								</requireProperty>
+								<requireProperty>
+									<property>CURATOR_ACCESS_SECRET</property>
+								</requireProperty>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>io.quarkus</groupId>
 				<artifactId>quarkus-maven-plugin</artifactId>
