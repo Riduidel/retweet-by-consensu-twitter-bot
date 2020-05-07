@@ -1,9 +1,8 @@
-package org.ndx.retweet.by.consensus.bot;
+package org.ndx.retweet.by.consensus.bot.twitter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import javax.enterprise.inject.Produces;
@@ -15,9 +14,11 @@ import org.jboss.logging.Logger;
 
 import com.pivovarit.function.ThrowingConsumer;
 
+import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.UserList;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
@@ -50,45 +51,42 @@ public class TwitterProducer {
 	}
 
 	@Produces @Named(CURATOR) Twitter createTwitterForCurator(@Named(DEFAULT) Twitter twitter,
-			@ConfigProperty(name="MODERATORS") List<String> moderators,
 			@ConfigProperty(name="CURATOR_ACCOUNT") String curator,
 			@ConfigProperty(name = "CURATOR_TOKEN_KEY") Optional<String> userKey,
 			@ConfigProperty(name = "CURATOR_TOKEN_SECRET") Optional<String> userSecret
 			) throws Exception{
-		return createTwitterForAccount(twitter, moderators, curator, userKey, userSecret);
+		return createTwitterForAccount(twitter, curator, userKey, userSecret);
 	}
 
 	@Produces @Named(PRESENTER) Twitter createTwitterForPresenter(@Named(DEFAULT) Twitter twitter,
-			@ConfigProperty(name="MODERATORS") List<String> moderators,
 			@ConfigProperty(name="PRESENTER_ACCOUNT") String curator,
 			@ConfigProperty(name = "PRESENTER_TOKEN_KEY") Optional<String> userKey,
 			@ConfigProperty(name = "PRESENTER_TOKEN_SECRET") Optional<String> userSecret
 			) throws Exception{
-		return createTwitterForAccount(twitter, moderators, curator, userKey, userSecret);
+		return createTwitterForAccount(twitter, curator, userKey, userSecret);
 	}
-
+	
 	Twitter createTwitterForAccount(Twitter twitter, 
-			List<String> moderators, 
-			String curator, 
-			Optional<String> userKey,
+			String accountName, 
+			Optional<String> userKey, 
 			Optional<String> userSecret) throws Exception {
 		if(userKey.isPresent() && userSecret.isPresent()) {
 			AccessToken token = new AccessToken(userKey.get(), userSecret.get());
 			twitter.setOAuthAccessToken(token);
 			return twitter;
 		} else {
-			AccessToken token = createAccessToken(twitter, curator);
+			AccessToken token = createAccessToken(twitter, accountName);
 			twitter.setOAuthAccessToken(token);
 			String message = String.format("An access token has been generated for this user."
 					+ "You now have to edit configuration.\n"
 					+ "Access token key: \"%s\"\n"
 					+ "Access token secret: \"%s\"", token.getToken(), token.getTokenSecret());
 			// Send access token infos as private message, to make sure communication works the intended way
-			moderators
+/*			moderators
 				.stream().forEach(
 					ThrowingConsumer.unchecked(
 					m -> twitter.sendDirectMessage(m, message)));
-			
+*/			
 			return twitter;
 		}
 	}
