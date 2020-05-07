@@ -25,12 +25,12 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterProducer {
-
-	public static final String DEFAULT = "@nobody";
 	
 	public static final String CURATOR = "@Curator";
 	
 	public static final String PRESENTER = "@Presenter";
+
+	public static final String DEFAULT = "@Default";
 
 	@Produces Configuration createTwitterConfiguration(
 			@ConfigProperty(name = "TWITTER_API_KEY") String applicationKey,

@@ -40,16 +40,20 @@ public class TwitterList {
 		this(curator, producersListName);
 	}
 
-	public Set<User> getUsers() throws TwitterException {
+	public Set<User> getUsers() {
 		if (users.isEmpty()) {
-			if (userList.isEmpty()) {
-				userList = Optional.of(getListNamed(user, name));
+			try {
+				if (userList.isEmpty()) {
+					userList = Optional.of(getListNamed(user, name));
+				}
+				// Now build user list by first fetching users, then adding included ones
+				Set<User> toUse = new HashSet<>(toRealList(user, userList.get()));
+				included.stream()
+					.forEach(ThrowingConsumer.unchecked(list -> toUse.addAll(list.getUsers())));
+				users = Optional.of(toUse);
+			} catch(TwitterException e) {
+				throw new RuntimeException(String.format("Unable to fetch users in %s list", userList.get().getFullName()), e);
 			}
-			// Now build user list by first fetching users, then adding included ones
-			Set<User> toUse = new HashSet<>(toRealList(user, userList.get()));
-			included.stream()
-				.forEach(ThrowingConsumer.unchecked(list -> toUse.addAll(list.getUsers())));
-			users = Optional.of(toUse);
 		}
 		return users.get();
 	}

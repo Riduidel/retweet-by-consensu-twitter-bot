@@ -24,12 +24,32 @@ public class VoteStorage {
 	@Inject ObjectMapper mapper;
 
 	public Vote store(Vote vote)  {
-		File storagePath = storage.orElseGet(() -> new File("votes-storage"));
-		storagePath.mkdirs();
-		File destination = new File(storagePath, String.format("%d.json", vote.tweetId));
+		File destination = getStoragePath(Long.toString(vote.tweetId));
 		try {
-			FileUtils.write(destination, mapper.writerFor(Vote.class).writeValueAsString(vote), "UTF-8");
+			mapper.writerFor(Vote.class).writeValues(destination).write(vote).close();
 			return vote;
+		} catch (IOException e) {
+			throw new RuntimeException(
+					String.format("Unable to write JSON content into %s", destination.getAbsolutePath()), 
+					e);
+		}
+	}
+
+	File getStoragePath(String tweetId) {
+		File storagePath = getStorageFile();
+		storagePath.mkdirs();
+		File destination = new File(storagePath, String.format("%d.json", tweetId));
+		return destination;
+	}
+
+	File getStorageFile() {
+		return storage.orElseGet(() -> new File("votes-storage"));
+	}
+
+	public Vote getVoteFor(String tweetId) {
+		File destination = getStoragePath(tweetId);
+		try {
+			return mapper.readerFor(Vote.class).readValue(destination);
 		} catch (IOException e) {
 			throw new RuntimeException(
 					String.format("Unable to write JSON content into %s", destination.getAbsolutePath()), 
