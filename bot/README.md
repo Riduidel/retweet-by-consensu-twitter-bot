@@ -19,6 +19,17 @@ it requires some Twitter configuration to run, which must be set in your `settin
 You should ask for application key/secret and for OAuth tokens of both **@Curator** and **@Presentation** twitter accounts.
 Once you have them, fill the following XML fragment, put it in your `settings.xml` in a profile called `retweet-by-consensus-twitter-bot` which looks like this
 
+```
+		<profile>
+			<id>settings-retweet-by-consensus</id>
+			<properties>
+				<TWITTER_API_KEY>TODO</TWITTER_API_KEY>
+				<TWITTER_API_SECRET>TODO</TWITTER_API_SECRET>
+				<TWITTER_ACCESS_TOKEN_KEY>TODO</TWITTER_ACCESS_TOKEN_KEY>
+				<TWITTER_ACCESS_TOKEN_SECRET>TODO</TWITTER_ACCESS_TOKEN_SECRET>
+			</properties>
+		</profile>
+```
  
 
 ## Packaging and running the application
