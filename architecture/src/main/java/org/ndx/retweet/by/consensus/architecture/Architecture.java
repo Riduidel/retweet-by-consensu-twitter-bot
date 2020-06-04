@@ -5,11 +5,17 @@ import java.io.IOException;
 import org.ndx.agile.architecture.base.AbstractArchitecture;
 
 import com.structurizr.Workspace;
+import com.structurizr.analysis.ComponentFinder;
+import com.structurizr.analysis.StructurizrAnnotationsComponentFinderStrategy;
 import com.structurizr.model.Container;
 import com.structurizr.model.Location;
 import com.structurizr.model.Model;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
+import com.structurizr.model.Tags;
+import com.structurizr.view.ContainerView;
+import com.structurizr.view.Shape;
+import com.structurizr.view.Styles;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.ViewSet;
 
@@ -41,7 +47,7 @@ public class Architecture extends AbstractArchitecture {
 		SoftwareSystem bot = model.addSoftwareSystem(Location.Internal, "retweet-by-consensus", 
 				"Retweet by consensus bot proposing the votes and exposing their results");
 		// Weirdly enough, this doesn't work
-//		producer.delivers(curator, "Posts messages on twitter mentionning @Curator");
+		producer.interactsWith(curator, "Posts messages on twitter mentionning @Curator");
 		bot.delivers(curator, "Read mentions to get latest rewteet requests");
 		bot.delivers(moderator, "Asks moderator to vote on rewteet");
 		moderator.uses(bot, "Validates retweet");
@@ -53,10 +59,32 @@ public class Architecture extends AbstractArchitecture {
 				"An example of a System Context diagram.");
 		contextView.addAllSoftwareSystems();
 		contextView.addAllPeople();
+		
+		// Detail the architecture of the bot by depending upon it and analyzing it
+		Container container = bot.addContainer("bot", "The bot code lives here", "Java/Quarkus");
+		container.delivers(curator, "Read mentions to get latest rewteet requests");
+		container.delivers(moderator, "Asks moderator to vote on rewteet");
+		container.delivers(presentation, "Shows retweet when validated");
+		container.delivers(curator, "Presents vote results (who produced the message, who voted for the retweet)");
 
-//		Styles styles = views.getConfiguration().getStyles();
-//		styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
-//		styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+		// Now details the various components from the code annotations
+		try {
+			ComponentFinder componentFinder = new ComponentFinder(
+				    container, "org.ndx.retweet.by.consensus.bot",
+				    new StructurizrAnnotationsComponentFinderStrategy());
+			componentFinder.findComponents();
+		} catch(Exception e) {
+			throw new RuntimeException("Unable to read internal components of "+container);
+		}
+		ContainerView containerView = views.createContainerView(bot, "bot-container", "description of the bot software system");
+		containerView.add(container);
+		containerView.add(curator);
+		containerView.add(presentation);
+		
+		
+		Styles styles = views.getConfiguration().getStyles();
+		styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
+		styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
 		return workspace;
 	}
 

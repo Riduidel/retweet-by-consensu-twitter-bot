@@ -12,7 +12,7 @@ Target deployment platform::
 We expect application to run on CleverCloud systems.
 
 Existing systems and integration standards::
-TODO
+Application is a twitter bot, that must handle twitter API
 
 Local standards (e.g. development, coding, etc)::
 TODO
@@ -24,13 +24,16 @@ Standard protocols::
 TODO
 
 Standard message formats::
-TODO
+Messages will be formatted according to Twitter constraints.
 
 Size of the software development team::
-TODO
+See https://github.com/Riduidel/retweet-by-consensus-twitter-bot/graphs/contributors[contributors on GitHub] ...
 
 Skill profile of the software development team::
-TODO
+Members of the dev team are supposed to be
+* fluent in Java development
+* know Quarkus and CDI
+* know Twitter API and data model
 
 Nature of the software being built (e.g. tactical or strategic)::
 Tactical system built to allow easy technical marketing action

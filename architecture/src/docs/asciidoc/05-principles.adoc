@@ -2,6 +2,10 @@
 :chapter: Principles
 include::_notify-bug-admonition.adoc[]
 
+Application is supposed to be idempotent.
+In other words, it should be possible to launch a fresh instance and have all waiting messages to be handled, 
+while already handled messages won't be duplicated.
+
 **TODO**
 ////
 The principles section allows you to summarise those principles that

@@ -33,6 +33,12 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.structurizr/structurizr-annotations -->
+		<dependency>
+			<groupId>com.structurizr</groupId>
+			<artifactId>structurizr-annotations</artifactId>
+			<version>${structurizr.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-resteasy</artifactId>

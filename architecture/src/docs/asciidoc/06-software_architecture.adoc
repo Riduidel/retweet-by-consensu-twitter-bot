@@ -2,6 +2,15 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
+[plantuml, {plantumldir}bot-container, svg, opts="interactive"]     
+----
+include::{structurizrdir}/bot-container.plantuml[]
+----
+
+Application is in fact quite simple: 
+a simple container contains the various responsible for connecting to the various twitter timelines 
+and to read/write content in those timelines. Let's detail things a little ...
+
 **TODO**
 ////
 The software architecture section is your "big picture" view and allows

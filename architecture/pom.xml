@@ -44,6 +44,16 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>bot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.structurizr</groupId>
+			<artifactId>structurizr-analysis</artifactId>
+			<version>${structurizr.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
 			<version>${agile-architecture-version}</version>
@@ -585,7 +595,8 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<!--  Livereload is launched as an exec job to allow it to run in background -->
+									<!-- Livereload is launched as an exec job to allow it to run in 
+										background -->
 									<executable>java</executable>
 									<!-- See https://github.com/davidB/livereload-jvm/blob/0.2.0/src/main/java/net_alchim31_livereload/Main.java 
 										for details -->
@@ -595,7 +606,8 @@
 											<dependency>net.alchim31:livereload-jvm</dependency>
 											<dependency>org.eclipse.jetty:jetty-util</dependency>
 											<dependency>org.eclipse.jetty:jetty-io</dependency>
-											<dependency>org.eclipse.jetty.orbit:javax.servlet:jar</dependency>.
+											<dependency>org.eclipse.jetty.orbit:javax.servlet:jar</dependency>
+											.
 											<dependency>org.eclipse.jetty:jetty-continuation</dependency>
 											<dependency>org.eclipse.jetty:jetty-server</dependency>
 											<dependency>org.eclipse.jetty.orbit:javax.servlet</dependency>

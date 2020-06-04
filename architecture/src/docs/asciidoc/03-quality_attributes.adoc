@@ -33,13 +33,13 @@ Reliability::
 TODO
 
 Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)::
-TODO
+Failover will not be handled: application is supposed to be idempotent, so if it fails, we let it down the time to fix the deffect, then restart it.
 
 Business continuity::
-TODO
+There is no business need
 
 Interoperability::
-TODO
+Application has to integrate as smoothy as possible with Twitter.
 
 Legal, compliance and regulatory requirements (e.g. data protection act)::
 TODO
