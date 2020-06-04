@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.structurizr.annotation.Component;
 
 /**
  * A very simple vote storage mechanism based upon JSON mapping
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author nicolas-delsaux
  *
  */
+@Component
 @ApplicationScoped
 public class VoteStorage {
 	@Inject @ConfigProperty(name="FILE_STORAGE", defaultValue = "votes-storage") Optional<File> storage;

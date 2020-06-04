@@ -1,11 +1,14 @@
 package org.ndx.retweet.by.consensus.architecture;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URLClassLoader;
 
 import org.ndx.agile.architecture.base.AbstractArchitecture;
 
 import com.structurizr.Workspace;
 import com.structurizr.analysis.ComponentFinder;
+import com.structurizr.analysis.SourceCodeComponentFinderStrategy;
 import com.structurizr.analysis.StructurizrAnnotationsComponentFinderStrategy;
 import com.structurizr.model.Container;
 import com.structurizr.model.Location;
@@ -13,6 +16,7 @@ import com.structurizr.model.Model;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.Tags;
+import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
 import com.structurizr.view.Shape;
 import com.structurizr.view.Styles;
@@ -67,19 +71,26 @@ public class Architecture extends AbstractArchitecture {
 		container.delivers(presentation, "Shows retweet when validated");
 		container.delivers(curator, "Presents vote results (who produced the message, who voted for the retweet)");
 
-		// Now details the various components from the code annotations
-		try {
-			ComponentFinder componentFinder = new ComponentFinder(
-				    container, "org.ndx.retweet.by.consensus.bot",
-				    new StructurizrAnnotationsComponentFinderStrategy());
-			componentFinder.findComponents();
-		} catch(Exception e) {
-			throw new RuntimeException("Unable to read internal components of "+container);
-		}
 		ContainerView containerView = views.createContainerView(bot, "bot-container", "description of the bot software system");
 		containerView.add(container);
 		containerView.add(curator);
 		containerView.add(presentation);
+		// Now details the various components from the code annotations
+		try {
+			ComponentFinder componentFinder = new ComponentFinder(
+				    container, "org.ndx.retweet.by.consensus.bot",
+				    new StructurizrAnnotationsComponentFinderStrategy(),
+				    new SourceCodeComponentFinderStrategy(new File("../bot/src/main/java"))
+				    );
+			if(getClass().getClassLoader() instanceof URLClassLoader) {
+				componentFinder.setUrlClassLoader((URLClassLoader) getClass().getClassLoader());
+			}
+			componentFinder.findComponents();
+			ComponentView componentsView = views.createComponentView(container, "bot-components", "Description of the various bot components");
+			componentsView.addAllComponents();
+		} catch(Exception e) {
+			throw new RuntimeException("Unable to read internal components of "+container);
+		}
 		
 		
 		Styles styles = views.getConfiguration().getStyles();

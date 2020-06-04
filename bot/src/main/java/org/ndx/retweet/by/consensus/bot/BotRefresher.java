@@ -9,11 +9,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
+
 import twitter4j.TwitterException;
 
+@Component(description = "Endpoint triggering the whole refresh process.", technology = "JAX-RS Endpoint")
 @Path("/refresh")
 public class BotRefresher {
 	
+	@UsesComponent(description = "Performs all timeline operations using reader")
 	@Inject CuratorMessagesReader reader;
 	/**
 	 * Fires a force refresh

@@ -11,7 +11,11 @@ Application is in fact quite simple:
 a simple container contains the various responsible for connecting to the various twitter timelines 
 and to read/write content in those timelines. Let's detail things a little ...
 
-**TODO**
+[plantuml, {plantumldir}bot-components, svg, opts="interactive"]     
+----
+include::{structurizrdir}/bot-components.plantuml[]
+----
+
 ////
 The software architecture section is your "big picture" view and allows
 you to present the structure of the software. Traditional software

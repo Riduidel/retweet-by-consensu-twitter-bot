@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingFunction;
+import com.structurizr.annotation.Component;
 
 import twitter4j.PagableResponseList;
 import twitter4j.ResponseList;
@@ -24,6 +25,7 @@ import twitter4j.UserList;
  * @author nicolas-delsaux
  *
  */
+@Component
 public class TwitterList {
 	public final Twitter user;
 	public final String name;

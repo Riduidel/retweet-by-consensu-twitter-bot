@@ -16,20 +16,28 @@ import org.ndx.retweet.by.consensus.bot.twitter.TwitterList;
 import org.ndx.retweet.by.consensus.bot.twitter.TwitterListsProducer;
 import org.ndx.retweet.by.consensus.bot.twitter.TwitterProducer;
 
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
+
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
 
+@Component(description = "Component displaying the bot configuration", technology = "JAX-RS Endpoint")
 @Path("/")
 public class BotConfigurationViewer {
 	
+	@UsesComponent(description = "To get user name")
 	@Inject @Named(TwitterProducer.CURATOR) Twitter curator;
+	@UsesComponent(description = "To get user name")
 	@Inject @Named(TwitterProducer.PRESENTER) Twitter presenter;
 	@Inject @ConfigProperty(name="PRODUCERS_LIST", defaultValue = "producers") String producersList;
 	@Inject @ConfigProperty(name="MODERATORS_LIST", defaultValue = "moderators") String moderatorsList;
+	@UsesComponent(description = "To get its content")
 	@Inject @Named(TwitterListsProducer.PRODUCERS) TwitterList producers;
+	@UsesComponent(description = "To get its content")
 	@Inject @Named(TwitterListsProducer.MODERATORS) TwitterList moderators;
 	
 	@Inject

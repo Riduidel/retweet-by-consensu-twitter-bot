@@ -27,6 +27,8 @@ import org.ndx.retweet.by.consensus.bot.vote.NotVotable;
 import org.ndx.retweet.by.consensus.bot.vote.VotingMachine;
 
 import com.pivovarit.function.ThrowingFunction;
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
 
 import twitter4j.DirectMessage;
 import twitter4j.ResponseList;
@@ -44,17 +46,22 @@ import twitter4j.User;
  * @author nicolas-delsaux
  *
  */
+@Component
 @ApplicationScoped
 public class CuratorMessagesReader {
     private static final Logger logger = Logger.getLogger(CuratorMessagesReader.class);
     public @Inject @Named(TwitterProducer.CURATOR) Twitter curator;
     
+    @UsesComponent(description = "To compute votes and eventually send retweets when needed")
     public @Inject VotingMachine votingMachine;
     
+    @UsesComponent(description = "Try to not load Twitter users from API each time")
     public @Inject TwitterUserCache userCache;
-    
+
+    @UsesComponent(description = "Check if message come from users in this list")
     public @Inject @Named(TwitterListsProducer.PRODUCERS) TwitterList producers;
     
+    @UsesComponent(description = "Moderators are obviously included in producers")
     public @Inject @Named(TwitterListsProducer.MODERATORS) TwitterList moderators;
     
     /**

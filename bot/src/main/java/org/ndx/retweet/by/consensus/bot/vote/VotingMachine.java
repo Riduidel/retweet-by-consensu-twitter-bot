@@ -20,6 +20,8 @@ import org.ndx.retweet.by.consensus.bot.twitter.message.VoteAccepted;
 import org.ndx.retweet.by.consensus.bot.twitter.message.VoteCast;
 
 import com.pivovarit.function.ThrowingConsumer;
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
 
 import twitter4j.DirectMessage;
 import twitter4j.Status;
@@ -32,6 +34,7 @@ import twitter4j.User;
  * @author nicolas-delsaux
  *
  */
+@Component
 @ApplicationScoped
 public class VotingMachine {
     private static final String MESSAGE_ALREADY_VOTED = "Our moderators have already voted for %s.\nThanks however for your implication";
@@ -49,9 +52,12 @@ public class VotingMachine {
     @Inject @ConfigProperty(name="CURATOR_ACCOUNT") String curatorAccount;
 	@Inject @Named(TwitterProducer.CURATOR) Twitter curator;
 	@Inject @Named(TwitterProducer.PRESENTER) Twitter presenter;
+	@UsesComponent(description = "Producers accounts are used here to make sure the message deserves a vote")
 	@Inject @Named(TwitterListsProducer.PRODUCERS) TwitterList producers;
+	@UsesComponent(description = "Messages are sent to each moderator for voting, and their responses are used to see if retweet should happen")
 	@Inject @Named(TwitterListsProducer.MODERATORS) TwitterList moderators;
 
+	@UsesComponent(description = "To store temporary vote state")
 	@Inject VoteStorage storage;
 	/**
 	 * Cast a vote for given status if it has not yet been done.

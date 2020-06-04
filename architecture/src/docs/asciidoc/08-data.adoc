@@ -2,6 +2,13 @@
 :chapter: Data
 include::_notify-bug-admonition.adoc[]
 
+Currently, the only data being stored is the temporary vote status.
+THis is required since we don't want to force users to write big messages.
+If we could use Twitter cards in private messages, we would then be able to convey all information this way, and as a consequence no more need any local storage.
+
+So the vote structure is really super simple:
+For each candidate message we have one JSON file storing the votes of each moderator.
+Once the reshold is reached, the message is retweeted and the file deleted.
 **TODO**
 ////
 The data associated with a software system is usually not the primary
