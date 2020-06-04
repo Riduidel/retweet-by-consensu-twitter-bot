@@ -17,7 +17,8 @@ public class BotRefresher {
 	@Inject CuratorMessagesReader reader;
 	/**
 	 * Fires a force refresh
-	 * @return for now, done, but it would be nice to have a complete status message (TODO)
+	 * @return For each mention of the curator account, will return a status indicating
+	 * if this status has triggered a vote, and what is the vote result
 	 * @throws TwitterException
 	 * @throws IOException
 	 */

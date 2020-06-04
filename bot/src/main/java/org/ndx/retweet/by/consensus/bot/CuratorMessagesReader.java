@@ -36,9 +36,9 @@ import twitter4j.TwitterException;
 import twitter4j.User;
 
 /**
- * This bean launches at sartup and read the curator timeline and mentions.
+ * This bean launches at startup and read the curator timeline and mentions.
  * For each mention, if it is part of a conversation, 
- * the message this mention is a response to is consdered as the message to potentially retweet.
+ * the message this mention is a response to is considered as the message to potentially retweet.
  * 
  * TODO add support for mention by direct messages
  * @author nicolas-delsaux
