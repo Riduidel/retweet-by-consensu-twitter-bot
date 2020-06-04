@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Quality Attributes</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2020-06-04T10:05:16Z</span>
+<span id="revdate">2020-06-04T14:47:57Z</span>
 </div>
 </div>
 <div id="content">
@@ -502,15 +502,15 @@ All votes results will be displayed in <strong>@Curator</strong> timeline, so th
 </dd>
 <dt class="hdlist1">Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)</dt>
 <dd>
-<p>TODO</p>
+<p>Failover will not be handled: application is supposed to be idempotent, so if it fails, we let it down the time to fix the deffect, then restart it.</p>
 </dd>
 <dt class="hdlist1">Business continuity</dt>
 <dd>
-<p>TODO</p>
+<p>There is no business need</p>
 </dd>
 <dt class="hdlist1">Interoperability</dt>
 <dd>
-<p>TODO</p>
+<p>Application has to integrate as smoothy as possible with Twitter.</p>
 </dd>
 <dt class="hdlist1">Legal, compliance and regulatory requirements (e.g. data protection act)</dt>
 <dd>
@@ -534,7 +534,7 @@ All votes results will be displayed in <strong>@Curator</strong> timeline, so th
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-04 10:05:04 UTC
+Last updated 2020-06-04 14:47:42 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

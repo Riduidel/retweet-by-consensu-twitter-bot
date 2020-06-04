@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Data</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2020-06-04T10:05:16Z</span>
+<span id="revdate">2020-06-04T14:47:57Z</span>
 </div>
 </div>
 <div id="content">
@@ -460,13 +460,21 @@ If you encounter any error, feel free to
 </table>
 </div>
 <div class="paragraph">
-<p><strong>TODO</strong></p>
+<p>Currently, the only data being stored is the temporary vote status.
+THis is required since we don&#8217;t want to force users to write big messages.
+If we could use Twitter cards in private messages, we would then be able to convey all information this way, and as a consequence no more need any local storage.</p>
+</div>
+<div class="paragraph">
+<p>So the vote structure is really super simple:
+For each candidate message we have one JSON file storing the votes of each moderator.
+Once the reshold is reached, the message is retweeted and the file deleted.
+<strong>TODO</strong></p>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-04 10:05:04 UTC
+Last updated 2020-06-04 14:47:42 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

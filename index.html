@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>architecture</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2020-06-04T10:05:16Z</span>
+<span id="revdate">2020-06-04T14:47:57Z</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -463,11 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#deployment">10. Deployment</a></li>
 <li><a href="#development-environment">11. Development Environment</a></li>
 <li><a href="#operation-and-support">12. Operation and Support</a></li>
-<li><a href="#decision-log">13. Decision Log</a>
-<ul class="sectlevel2">
-<li><a href="#use-adr-to-document-architecture-decisions">13.1. Use ADR to document architecture decisions</a></li>
-</ul>
-</li>
+<li><a href="#decision-log">13. Decision Log</a></li>
 </ul>
 </div>
 </div>
@@ -510,7 +506,7 @@ So what can we do ?</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<object type="image/svg+xml" data="./images/SystemContext.svg" width="587" height="686"><span class="alt">SystemContext</span></object>
+<object type="image/svg+xml" data="./images/SystemContext.svg" width="760" height="686"><span class="alt">SystemContext</span></object>
 </div>
 </div>
 </div>
@@ -622,15 +618,15 @@ All votes results will be displayed in <strong>@Curator</strong> timeline, so th
 </dd>
 <dt class="hdlist1">Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)</dt>
 <dd>
-<p>TODO</p>
+<p>Failover will not be handled: application is supposed to be idempotent, so if it fails, we let it down the time to fix the deffect, then restart it.</p>
 </dd>
 <dt class="hdlist1">Business continuity</dt>
 <dd>
-<p>TODO</p>
+<p>There is no business need</p>
 </dd>
 <dt class="hdlist1">Interoperability</dt>
 <dd>
-<p>TODO</p>
+<p>Application has to integrate as smoothy as possible with Twitter.</p>
 </dd>
 <dt class="hdlist1">Legal, compliance and regulatory requirements (e.g. data protection act)</dt>
 <dd>
@@ -684,7 +680,7 @@ If you encounter any error, feel free to
 </dd>
 <dt class="hdlist1">Existing systems and integration standards</dt>
 <dd>
-<p>TODO</p>
+<p>Application is a twitter bot, that must handle twitter API</p>
 </dd>
 <dt class="hdlist1">Local standards (e.g. development, coding, etc)</dt>
 <dd>
@@ -700,15 +696,28 @@ If you encounter any error, feel free to
 </dd>
 <dt class="hdlist1">Standard message formats</dt>
 <dd>
-<p>TODO</p>
+<p>Messages will be formatted according to Twitter constraints.</p>
 </dd>
 <dt class="hdlist1">Size of the software development team</dt>
 <dd>
-<p>TODO</p>
+<p>See <a href="https://github.com/Riduidel/retweet-by-consensus-twitter-bot/graphs/contributors">contributors on GitHub</a> &#8230;&#8203;</p>
 </dd>
 <dt class="hdlist1">Skill profile of the software development team</dt>
 <dd>
-<p>TODO</p>
+<p>Members of the dev team are supposed to be</p>
+<div class="ulist">
+<ul>
+<li>
+<p>fluent in Java development</p>
+</li>
+<li>
+<p>know Quarkus and CDI</p>
+</li>
+<li>
+<p>know Twitter API and data model</p>
+</li>
+</ul>
+</div>
 </dd>
 <dt class="hdlist1">Nature of the software being built (e.g. tactical or strategic)</dt>
 <dd>
@@ -746,6 +755,11 @@ If you encounter any error, feel free to
 </table>
 </div>
 <div class="paragraph">
+<p>Application is supposed to be idempotent.
+In other words, it should be possible to launch a fresh instance and have all waiting messages to be handled,
+while already handled messages won&#8217;t be duplicated.</p>
+</div>
+<div class="paragraph">
 <p><strong>TODO</strong></p>
 </div>
 </div>
@@ -766,8 +780,20 @@ If you encounter any error, feel free to
 </tr>
 </table>
 </div>
+<div class="imageblock">
+<div class="content">
+<object type="image/svg+xml" data="./images/bot-container.svg" width="491" height="501"><span class="alt">bot container</span></object>
+</div>
+</div>
 <div class="paragraph">
-<p><strong>TODO</strong></p>
+<p>Application is in fact quite simple:
+a simple container contains the various responsible for connecting to the various twitter timelines
+and to read/write content in those timelines. Let&#8217;s detail things a little &#8230;&#8203;</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<object type="image/svg+xml" data="./images/bot-components.svg" width="931" height="1170"><span class="alt">bot components</span></object>
+</div>
 </div>
 </div>
 </div>
@@ -809,7 +835,15 @@ If you encounter any error, feel free to
 </table>
 </div>
 <div class="paragraph">
-<p><strong>TODO</strong></p>
+<p>Currently, the only data being stored is the temporary vote status.
+THis is required since we don&#8217;t want to force users to write big messages.
+If we could use Twitter cards in private messages, we would then be able to convey all information this way, and as a consequence no more need any local storage.</p>
+</div>
+<div class="paragraph">
+<p>So the vote structure is really super simple:
+For each candidate message we have one JSON file storing the votes of each moderator.
+Once the reshold is reached, the message is retweeted and the file deleted.
+<strong>TODO</strong></p>
 </div>
 </div>
 </div>
@@ -913,77 +947,8 @@ If you encounter any error, feel free to
 </tr>
 </table>
 </div>
-<div class="sect2">
-<h3 id="use-adr-to-document-architecture-decisions"><a class="anchor" href="#use-adr-to-document-architecture-decisions"></a>13.1. Use ADR to document architecture decisions</h3>
 <div class="paragraph">
-<p>Date: 2020-01-14</p>
-</div>
-<div class="paragraph">
-<p>We will store decisions as asciidoc documents in <code>src/docs/asciidoc/decisions</code>.</p>
-</div>
-<div class="paragraph">
-<p><strong>Accepted</strong></p>
-</div>
-<div class="paragraph">
-<p>The purpose of this section is to simply record the major decisions that
-have been made, including both the technology choices (e.g. products,
-frameworks, etc) and the overall architecture (e.g. the structure of the
-software, architectural style, decomposition, patterns, etc). For
-example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Why did you choose technology or framework "X" over "Y" and "Z"?</p>
-</li>
-<li>
-<p>How did you do this? Product evaluation or proof of concept?</p>
-</li>
-<li>
-<p>Were you forced into making a decision about "X" based upon corporate
-policy or enterprise architecture strategies?</p>
-</li>
-<li>
-<p>Why did you choose the selected software architecture? What other
-options did you consider?</p>
-</li>
-<li>
-<p>How do you know that the solution satisfies the major quality
-attributes?</p>
-</li>
-<li>
-<p>&#8230;&#8203;</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Decisions will be integrated in generated documentation</p>
-</li>
-<li>
-<p>Rendering will be optimal</p>
-</li>
-<li>
-<p>Decisions will be burried deep inside Asciidoc hiearchy</p>
-</li>
-<li>
-<p>Decisions can be put in a specific folder</p>
-</li>
-<li>
-<p>We can use "tooling" to access those decisions</p>
-</li>
-<li>
-<p>Decisions will be isolate from architecture documentation</p>
-</li>
-<li>
-<p>Decision rendering will use another tooling (typically Markdown)</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Integrating decisions in Asciidoc requires changing a section of architecture.</p>
-</div>
+<p>Decisions should not be simple documents with no workflow !</p>
 </div>
 </div>
 </div>
@@ -991,7 +956,7 @@ attributes?</p>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-04 10:05:04 UTC
+Last updated 2020-06-04 14:47:42 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
