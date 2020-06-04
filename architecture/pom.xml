@@ -11,9 +11,10 @@
 	<properties>
 		<asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
 		<asciidoc.source.docs.directory>src/docs/asciidoc</asciidoc.source.docs.directory>
-		<asciidoc.target.docs.directory>${project.build.directory}/asciidoc/docs</asciidoc.target.docs.directory>
+		<asciidoc.target.base.directory>${project.build.directory}/asciidoc</asciidoc.target.base.directory>
+		<asciidoc.target.docs.directory>${asciidoc.target.base.directory}/docs</asciidoc.target.docs.directory>
 		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
-		<asciidoc.target.slides.directory>${project.build.directory}/asciidoc/slides</asciidoc.target.slides.directory>
+		<asciidoc.target.slides.directory>${asciidoc.target.base.directory}/slides</asciidoc.target.slides.directory>
 		<agile.architecture.main.class>org.ndx.retweet.by.consensus.architecture.Architecture</agile.architecture.main.class>
 		<agile.architecture.output.dir>${project.build.directory}/structurizr</agile.architecture.output.dir>
 		<agile.architecture.output.diagrams>${agile.architecture.output.dir}/diagrams</agile.architecture.output.diagrams>
@@ -162,10 +163,11 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<phase>prepare-package</phase>
+						<id>Generate architecture model and diagrams</id>
 						<goals>
 							<goal>java</goal>
 						</goals>
@@ -330,26 +332,21 @@
 					<plugin>
 						<groupId>com.fizzed</groupId>
 						<artifactId>fizzed-watcher-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>watch-docs</id>
-								<configuration>
-									<touchFile>target/watcher.docs.touchfile</touchFile>
-									<watches>
-										<watch>
-											<directory>${project.basedir}/src/main/java</directory>
-										</watch>
-										<watch>
-											<directory>${asciidoc.source.docs.directory}</directory>
-										</watch>
-									</watches>
-									<goals>
-										<goal>prepare-package</goal>
-										<goal>org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-html-doc</goal>
-									</goals>
-								</configuration>
-							</execution>
-						</executions>
+						<configuration>
+							<touchFile>target/watcher.docs.touchfile</touchFile>
+							<watches>
+								<watch>
+									<directory>${project.basedir}/src/main/java</directory>
+								</watch>
+								<watch>
+									<directory>${asciidoc.source.docs.directory}</directory>
+								</watch>
+							</watches>
+							<goals>
+								<goal>prepare-package</goal>
+								<goal>org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-html-doc</goal>
+							</goals>
+						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -544,24 +541,87 @@
 					<plugin>
 						<groupId>com.fizzed</groupId>
 						<artifactId>fizzed-watcher-maven-plugin</artifactId>
+						<configuration>
+							<touchFile>target/watcher.slides.touchfile</touchFile>
+							<watches>
+								<watch>
+									<directory>${project.basedir}/src/main/java</directory>
+								</watch>
+								<watch>
+									<directory>${asciidoc.source.slides.directory}</directory>
+								</watch>
+							</watches>
+							<goals>
+								<goal>prepare-package</goal>
+								<goal>org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-slides</goal>
+							</goals>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- This profile should be invoked at the process-resources phase to 
+				correctly trigger the remaining ones ! -->
+			<id>livereload</id>
+			<dependencies>
+				<dependency>
+					<groupId>net.alchim31</groupId>
+					<artifactId>livereload-jvm</artifactId>
+					<version>0.2.0</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<defaultGoal>package</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>watch-slides</id>
+								<phase>package</phase>
+								<id>start-livereload-server in background</id>
+								<goals>
+									<goal>exec</goal>
+								</goals>
 								<configuration>
-									<touchFile>target/watcher.slides.touchfile</touchFile>
-									<watches>
-										<watch>
-											<directory>${project.basedir}/src/main/java</directory>
-										</watch>
-										<watch>
-											<directory>${asciidoc.source.slides.directory}</directory>
-										</watch>
-									</watches>
-									<goals>
-										<goal>prepare-package</goal>
-										<goal>org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-slides</goal>
-									</goals>
+									<!--  Livereload is launched as an exec job to allow it to run in background -->
+									<executable>java</executable>
+									<!-- See https://github.com/davidB/livereload-jvm/blob/0.2.0/src/main/java/net_alchim31_livereload/Main.java 
+										for details -->
+									<arguments>
+										<argument>-classpath</argument>
+										<classpath>
+											<dependency>net.alchim31:livereload-jvm</dependency>
+											<dependency>org.eclipse.jetty:jetty-util</dependency>
+											<dependency>org.eclipse.jetty:jetty-io</dependency>
+											<dependency>org.eclipse.jetty.orbit:javax.servlet:jar</dependency>.
+											<dependency>org.eclipse.jetty:jetty-continuation</dependency>
+											<dependency>org.eclipse.jetty:jetty-server</dependency>
+											<dependency>org.eclipse.jetty.orbit:javax.servlet</dependency>
+											<dependency>org.eclipse.jetty:jetty-http</dependency>
+											<dependency>com.googlecode.json-simple:json-simple</dependency>
+											<dependency>org.eclipse.jetty:jetty-websocket</dependency>
+										</classpath>
+										<argument>net_alchim31_livereload.Main</argument>
+										<argument>-d</argument>
+										<argument>${asciidoc.target.base.directory}</argument>
+									</arguments>
+									<async>true</async>
+									<asyncDestroyOnShutdown>true</asyncDestroyOnShutdown>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.fizzed</groupId>
+						<artifactId>fizzed-watcher-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
