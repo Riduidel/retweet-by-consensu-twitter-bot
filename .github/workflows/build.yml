@@ -23,9 +23,27 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven
-      run: mvn -B install --file pom.xml -DGITHUB_ACCESS_TOKEN=$TOKEN_FOR_GITHUB
+      run: >-
+        mvn -B install --file pom.xml
+        -DGITHUB_ACCESS_TOKEN=$TOKEN_FOR_GITHUB
+        -DTWITTER_API_KEY=$TWITTER_API_KEY
+        -DTWITTER_API_SECRET=$TWITTER_API_SECRET
+        -DTWITTER_ACCESS_TOKEN_KEY=$TWITTER_ACCESS_TOKEN_KEY
+        -DTWITTER_ACCESS_TOKEN_SECRET=$TWITTER_ACCESS_TOKEN_SECRET
+        -DCURATOR_ACCOUNT=$CURATOR_ACCOUNT
+        -DCURATOR_ACCESS_KEY=$CURATOR_ACCESS_KEY
+        -DCURATOR_ACCESS_SECRET=$CURATOR_ACCESS_SECRET
+
       env:
         TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
+        TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+        TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+        TWITTER_ACCESS_TOKEN_KEY: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
+        TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+        CURATOR_ACCOUNT: ${{ secrets.CURATOR_ACCOUNT }}
+        CURATOR_ACCESS_KEY: ${{ secrets.CURATOR_ACCESS_KEY }}
+        CURATOR_ACCESS_SECRET: ${{ secrets.CURATOR_ACCESS_SECRET }}
+
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
